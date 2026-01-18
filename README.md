@@ -34,6 +34,63 @@ optimization benchmark functions. Contains all CEC competition functions from 20
 * **Dependencies:** numpy, matplotlib
 
 
+## Fork Notes (tunayalc)
+
+This repository is a fork of `thieu1995/opfunu`.
+
+The goal of this fork is to extend `opfunu.name_based` with a small, commonly-used set of benchmark objective functions
+often referenced as **F1–F24** (Sphere, Elliptic, Rosenbrock, Rastrigin, etc.), and to make them usable without a runtime
+dependency on NiaPy.
+
+### Added/Aligned Name-Based Benchmarks (F1–F24)
+
+| ID | Opfunu class |
+|---:|---|
+| F1 | `Sphere` |
+| F2 | `Elliptic` |
+| F3 | `SumSquares` |
+| F4 | `SumPower` |
+| F5 | `Schwefel222` |
+| F6 | `Schwefel221` |
+| F7 | `Step2` |
+| F8 | `QuarticNoNoise` |
+| F9 | `Quartic` |
+| F10 | `Rosenbrock` |
+| F11 | `Rastrigin` |
+| F12 | `NonContinuousRastrigin` |
+| F13 | `Griewank` |
+| F14 | `Schwefel` (2.26) |
+| F15 | `Ackley` |
+| F16 | `Penalized1` |
+| F17 | `Penalized2` |
+| F18 | `Alpine01` |
+| F19 | `Levy` |
+| F20 | `Weierstrass` |
+| F21 | `Schaffer` |
+| F22 | `Himmelblau01` |
+| F23 | `Michalewicz` |
+| F24 | `DixonPrice` |
+
+Notes:
+- `Himmelblau01` is used for F22 to avoid changing the existing 2D `Himmelblau` benchmark already present in Opfunu.
+- `QuarticNoNoise` is a deterministic variant; `Quartic` remains the noisy variant.
+
+### Quick Usage (Name-Based)
+
+```python
+import numpy as np
+from opfunu.name_based.r_func import Rastrigin
+
+f = Rastrigin(ndim=30)
+print(f.evaluate(np.zeros(30)))
+```
+
+### Mealpy Integration
+
+See the companion Mealpy fork for a minimal working example that uses `opfunu.name_based` as `obj_func`:
+https://github.com/tunayalc/mealpy
+
+
 # Citation Request 
 
 Please include these citations if you plan to use this library:

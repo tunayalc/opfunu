@@ -73,6 +73,19 @@ def test_Himmelblau_results():
     assert len(problem.x_global) == ndim
 
 
+def test_Himmelblau01_results():
+    ndim = 17
+    problem = opfunu.name_based.Himmelblau01(ndim=ndim)
+    x = np.ones(ndim)
+    result = problem.evaluate(x)
+    assert type(result) == np.float64
+    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem.lb, np.ndarray)
+    assert len(problem.lb) == ndim
+    assert problem.bounds.shape[0] == ndim
+    assert len(problem.x_global) == ndim
+
+
 def test_Hosaki_results():
     ndim = 2
     problem = opfunu.name_based.Hosaki(ndim=ndim)

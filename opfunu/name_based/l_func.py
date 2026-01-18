@@ -185,6 +185,61 @@ class Leon(Benchmark):
         return 100. * (x[1] - x[0] ** 2.0) ** 2.0 + (1 - x[0]) ** 2.0
 
 
+class Levy(Benchmark):
+    r"""
+    .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
+    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+
+    .. math::
+
+        w_i = 1 + \frac{x_i - 1}{4}
+
+        f(\mathbf{x}) = \sin^2(\pi w_1) + \sum_{i=1}^{n-1}(w_i-1)^2\left(1 + 10\sin^2(\pi w_{i+1})\right)
+        + (w_n-1)^2\left(1 + \sin^2(2\pi w_n)\right)
+
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-10, 10]` for :math:`i = 1, ..., n`.
+
+    *Global optimum*: :math:`f(\mathbf{x}) = 0` for :math:`x_i = 1` for :math:`i = 1, ..., n`
+    """
+
+    name = "Levy Function"
+    latex_formula = (r'f(\mathbf{x}) = \sin^2(\pi w_1) + \sum_{i=1}^{n-1}(w_i-1)^2\left(1 + 10\sin^2(\pi w_{i+1})\right)'
+                     r' + (w_n-1)^2\left(1 + \sin^2(2\pi w_n)\right), \; w_i = 1 + \frac{x_i - 1}{4}')
+    latex_formula_dimension = r'd \in \mathbb{N}_{+}^{*}'
+    latex_formula_bounds = r'x_i \in [-10, 10], \forall i \in \llbracket 1, d\rrbracket'
+    latex_formula_global_optimum = r'f(1, 1, ..., 1) = 0'
+    continuous = True
+    linear = False
+    convex = False
+    unimodal = False
+    separable = False
+
+    differentiable = True
+    scalable = True
+    randomized_term = False
+    parametric = False
+
+    modality = True
+
+    def __init__(self, ndim=None, bounds=None):
+        super().__init__()
+        self.dim_changeable = True
+        self.dim_default = 2
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-10., 10.] for _ in range(self.dim_default)]))
+        self.f_global = 0.0
+        self.x_global = np.ones(self.ndim)
+
+    def evaluate(self, x, *args):
+        self.check_solution(x)
+        self.n_fe += 1
+        x = np.asarray(x)
+        w = 1.0 + (x - 1.0) / 4.0
+        term1 = np.sin(np.pi * w[0]) ** 2
+        term2 = np.sum((w[:-1] - 1.0) ** 2 * (1.0 + 10.0 * np.sin(np.pi * w[1:]) ** 2))
+        term3 = (w[-1] - 1.0) ** 2 * (1.0 + np.sin(2.0 * np.pi * w[-1]) ** 2)
+        return term1 + term2 + term3
+
+
 class Levy03(Benchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods: Evaluation

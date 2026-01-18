@@ -99,7 +99,7 @@ class Griewank(Benchmark):
     name = "Griewank Function"
     latex_formula = r'f(x) = \frac{1}{4000}\sum_{i=1}^n x_i^2 - \prod_{i=1}^n\cos\left(\frac{x_i}{\sqrt{i}}\right) + 1'
     latex_formula_dimension = r'd \in N^+'
-    latex_formula_bounds = r'x_i \in [-100, 100], \forall i \in \llbracket 1, d\rrbracket'
+    latex_formula_bounds = r'x_i \in [-600, 600], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(0,...,0) = 0'
     continuous = True
     linear = False
@@ -118,7 +118,7 @@ class Griewank(Benchmark):
         super().__init__()
         self.dim_changeable = True
         self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-600., 600.] for _ in range(self.dim_default)]))
         self.f_global = 0.
         self.x_global = np.zeros(self.ndim)
 

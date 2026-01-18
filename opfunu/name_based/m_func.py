@@ -160,7 +160,7 @@ class Michalewicz(Benchmark):
     separable = False
 
     differentiable = True
-    scalable = False
+    scalable = True
     randomized_term = False
     parametric = False
 
@@ -168,11 +168,11 @@ class Michalewicz(Benchmark):
 
     def __init__(self, ndim=None, bounds=None):
         super().__init__()
-        self.dim_changeable = False
+        self.dim_changeable = True
         self.dim_default = 2
         self.check_ndim_and_bounds(ndim, bounds, np.array([[0., np.pi] for _ in range(self.dim_default)]))
         self.f_global = -1.8013
-        self.x_global = np.array([0, 0])
+        self.x_global = np.zeros(self.ndim)
 
     def evaluate(self, x, *args):
         self.check_solution(x)

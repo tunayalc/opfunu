@@ -154,3 +154,58 @@ class NewFunction02(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         return ((np.abs(np.sin(np.sqrt(np.abs(x[0] ** 2 + x[1]))))) ** 0.5 + 0.01 * (x[0] + x[1]))
+
+
+class NonContinuousRastrigin(Benchmark):
+    r"""
+    .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
+    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+
+    .. math::
+
+        y_i =
+            \begin{cases}
+              x_i & \lvert x_i \rvert < 0.5 \\
+              \frac{\mathrm{round}(2x_i)}{2} & \lvert x_i \rvert \ge 0.5
+            \end{cases}
+
+        f(\mathbf{x}) = \sum_{i=1}^n \left(y_i^2 - 10\cos(2\pi y_i) + 10\right)
+
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-5.12, 5.12]` for :math:`i = 1, ..., n`.
+
+    *Global optimum*: :math:`f(\mathbf{x}) = 0` for :math:`x_i = 0` for :math:`i = 1, ..., n`
+    """
+
+    name = "Non-continuous Rastrigin Function"
+    latex_formula = (r'f(\mathbf{x}) = \sum_{i=1}^n \left(y_i^2 - 10\cos(2\pi y_i) + 10\right), \; '
+                     r'y_i = x_i \; \mathrm{if}\; |x_i|<0.5 \; \mathrm{else}\; \mathrm{round}(2x_i)/2')
+    latex_formula_dimension = r'd \in \mathbb{N}_{+}^{*}'
+    latex_formula_bounds = r'x_i \in [-5.12, 5.12], \forall i \in \llbracket 1, d\rrbracket'
+    latex_formula_global_optimum = r'f(0, 0, ...,0) = 0'
+    continuous = False
+    linear = False
+    convex = False
+    unimodal = False
+    separable = True
+
+    differentiable = False
+    scalable = True
+    randomized_term = False
+    parametric = False
+
+    modality = True
+
+    def __init__(self, ndim=None, bounds=None):
+        super().__init__()
+        self.dim_changeable = True
+        self.dim_default = 2
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-5.12, 5.12] for _ in range(self.dim_default)]))
+        self.f_global = 0.0
+        self.x_global = np.zeros(self.ndim)
+
+    def evaluate(self, x, *args):
+        self.check_solution(x)
+        self.n_fe += 1
+        x = np.asarray(x)
+        y = np.where(np.abs(x) < 0.5, x, np.round(2.0 * x) / 2.0)
+        return np.sum(y ** 2 - 10.0 * np.cos(2.0 * np.pi * y) + 10.0)

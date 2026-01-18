@@ -146,6 +146,54 @@ class Quartic(Benchmark):
         return np.sum(i*x**4.) + np.random.rand()
 
 
+class QuarticNoNoise(Benchmark):
+    r"""
+    .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
+    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+
+    .. math::
+
+        f_{\text{QuarticNoNoise}}(\mathbf{x}) = \sum_{i=1}^{n} i x_i^4
+
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-1.28, 1.28]` for :math:`i = 1, ..., n`.
+
+    *Global optimum*: :math:`f(\mathbf{x}) = 0` for :math:`x_i = 0` for :math:`i = 1, ..., n`
+    """
+
+    name = "Quartic Function (No Noise)"
+    latex_formula = r'f(\mathbf{x}) = \sum_{i=1}^{n} i x_i^4'
+    latex_formula_dimension = r'd \in \mathbb{N}_{+}^{*}'
+    latex_formula_bounds = r'x_i \in [-1.28, 1.28], \forall i \in \llbracket 1, d\rrbracket'
+    latex_formula_global_optimum = r'f(0, 0, ...,0) = 0'
+    continuous = True
+    linear = False
+    convex = True
+    unimodal = True
+    separable = True
+
+    differentiable = True
+    scalable = True
+    randomized_term = False
+    parametric = False
+
+    modality = False
+
+    def __init__(self, ndim=None, bounds=None):
+        super().__init__()
+        self.dim_changeable = True
+        self.dim_default = 2
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-1.28, 1.28] for _ in range(self.dim_default)]))
+        self.f_global = 0.0
+        self.x_global = np.zeros(self.ndim)
+
+    def evaluate(self, x, *args):
+        self.check_solution(x)
+        self.n_fe += 1
+        x = np.asarray(x)
+        i = np.arange(1, self.ndim + 1)
+        return np.sum(i * x ** 4)
+
+
 class Quintic(Benchmark):
     """
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems

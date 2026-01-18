@@ -183,6 +183,53 @@ class HelicalValley(Benchmark):
         return x[2] ** 2 + 100 * ((x[2] - 10 * theta) ** 2 + (r - 1) ** 2)
 
 
+class Himmelblau01(Benchmark):
+    r"""
+    .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
+    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+
+    .. math::
+
+        f(\mathbf{x}) = \frac{1}{n}\sum_{i=1}^{n}\left(x_i^4 - 16x_i^2 + 5x_i\right)
+
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-5, 5]` for :math:`i = 1, ..., n`.
+
+    *Global optimum*: :math:`x_i^* \approx -2.903534` for :math:`i = 1, ..., n`
+    """
+
+    name = "Himmelblau 01 Function"
+    latex_formula = r'f(\mathbf{x}) = \frac{1}{n}\sum_{i=1}^{n}\left(x_i^4 - 16x_i^2 + 5x_i\right)'
+    latex_formula_dimension = r'd \in \mathbb{N}_{+}^{*}'
+    latex_formula_bounds = r'x_i \in [-5, 5], \forall i \in \llbracket 1, d\rrbracket'
+    latex_formula_global_optimum = r'x_i^*\approx -2.903534'
+    continuous = True
+    linear = False
+    convex = False
+    unimodal = False
+    separable = True
+
+    differentiable = True
+    scalable = True
+    randomized_term = False
+    parametric = False
+
+    modality = True
+
+    def __init__(self, ndim=None, bounds=None):
+        super().__init__()
+        self.dim_changeable = True
+        self.dim_default = 2
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-5., 5.] for _ in range(self.dim_default)]))
+        self.x_global = np.full(self.ndim, -2.9035340277711783)
+        self.f_global = -78.33233140754282
+
+    def evaluate(self, x, *args):
+        self.check_solution(x)
+        self.n_fe += 1
+        x = np.asarray(x)
+        return np.sum(x ** 4 - 16.0 * x ** 2 + 5.0 * x) / self.ndim
+
+
 class Himmelblau(Benchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization

@@ -121,6 +121,58 @@ class Ackley03(Benchmark):
         return -200 * np.exp(-0.02 * np.sqrt(x[0] ** 2 + x[1] ** 2)) + 5 * np.exp(np.cos(3 * x[0]) + np.sin(3 * x[1]))
 
 
+class Ackley(Benchmark):
+    r"""
+    .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
+    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+
+    .. math::
+
+        f_{\text{Ackley}}(\mathbf{x}) = -20 \exp\left(-0.2\sqrt{\frac{1}{n}\sum_{i=1}^n x_i^2}\right)
+        - \exp\left(\frac{1}{n}\sum_{i=1}^n \cos(2\pi x_i)\right) + 20 + e
+
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-32, 32]` for :math:`i = 1, ..., n`.
+
+    *Global optimum*: :math:`f(\mathbf{x}) = 0` for :math:`x_i = 0` for :math:`i = 1, ..., n`
+    """
+
+    name = "Ackley Function"
+    latex_formula = (r'f_{\text{Ackley}}(\mathbf{x}) = -20 \exp\left(-0.2\sqrt{\frac{1}{n}\sum_{i=1}^n x_i^2}\right)'
+                     r' - \exp\left(\frac{1}{n}\sum_{i=1}^n \cos(2\pi x_i)\right) + 20 + e')
+    latex_formula_dimension = r'd \in \mathbb{N}_{+}^{*}'
+    latex_formula_bounds = r'x_i \in [-32, 32], \forall i \in \llbracket 1, d\rrbracket'
+    latex_formula_global_optimum = r'f(0, 0, ...,0) = 0'
+    continuous = True
+    linear = False
+    convex = False
+    unimodal = False
+    separable = False
+
+    differentiable = True
+    scalable = True
+    randomized_term = False
+    parametric = False
+
+    modality = True
+
+    def __init__(self, ndim=None, bounds=None):
+        super().__init__()
+        self.dim_changeable = True
+        self.dim_default = 2
+        self.check_ndim_and_bounds(ndim, bounds, np.array([[-32., 32.] for _ in range(self.dim_default)]))
+        self.f_global = 0.0
+        self.x_global = np.zeros(self.ndim)
+
+    def evaluate(self, x, *args):
+        self.check_solution(x)
+        self.n_fe += 1
+        x = np.asarray(x)
+        n = self.ndim
+        sum_sq = np.sum(x ** 2)
+        sum_cos = np.sum(np.cos(2 * np.pi * x))
+        return -20.0 * np.exp(-0.2 * np.sqrt(sum_sq / n)) - np.exp(sum_cos / n) + 20.0 + np.e
+
+
 class Adjiman(Benchmark):
     """
     [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark FunctionsFor Global Optimization Problems Int.

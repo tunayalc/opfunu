@@ -42,6 +42,12 @@ The goal of this fork is to extend `opfunu.name_based` with a small, commonly-us
 often referenced as **F1–F24** (Sphere, Elliptic, Rosenbrock, Rastrigin, etc.), and to make them usable without a runtime
 dependency on NiaPy.
 
+To install and try this fork (instead of the PyPI release):
+
+```sh
+pip install -U git+https://github.com/tunayalc/opfunu.git@master
+```
+
 ### Added/Aligned Name-Based Benchmarks (F1–F24)
 
 | ID | Opfunu class |
